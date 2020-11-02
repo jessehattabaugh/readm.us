@@ -10,16 +10,16 @@ export default function Home() {
 async function showDirectoryPicker() {
   const dirHandle = await window.showDirectoryPicker();
   for await (const entry of dirHandle.values()) {
-    console.dir(entry);
+    //console.dir(entry);
     switch (entry.kind) {
       case 'file':
-        console.log(`File named ${entry.name}`);
+        console.log(`📄 File named ${entry.name}`);
         break;
       case 'directory':
-        console.log(`Directory named ${entry.name}`);
+        console.log(`📁 Directory named ${entry.name}`);
       break;
       default:
-        console.log(entry);
+        console.log(`🤷 ${entry}`, entry);
         break;
     }
   }
