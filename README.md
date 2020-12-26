@@ -1,7 +1,5 @@
 # readm.us' readme
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## The Problem
 
 I'm an Instapaper/Google Play Books user because they read to me when I'm in the bath. However, these are both native apps that spy and use lots of resources. Instapaper insists on reading all the punctuation, and it sounds terrible when they hit blocks of code, which is common in my kinds of books. Google Play Books is only capable of reading epub files, but half my books are PDFs. 
