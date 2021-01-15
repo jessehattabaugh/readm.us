@@ -21,9 +21,9 @@
   },
   "scripts": {
     "build": "snowpack build",
-    "start": "kill-port 8080 && snowpack dev",
+    "start": "snowpack dev",
     "smoke": "tcpie localhost:8080 -c1",
-    "test": "start-test :8080"
+    "test": "kill-port 8080 && start-test :8080 smoke"
   },
   "version": "0.0.0"
 }

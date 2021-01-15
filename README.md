@@ -25,11 +25,15 @@ This API is the newest and likely only supported with a flag. However, it would 
 First, run the development server:
 
 ```bash
-npm run dev
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:8080](http://localhost:8080) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `index.html` and `index.js`. The page auto-updates as you edit the file.
 
 ## Tests
+
+```bash
+npm test
+```
