@@ -17,7 +17,6 @@ class LoadBooks extends LitElement {
 		this.#dirHandle = await window.showDirectoryPicker();
 		await this.#scanDir(this.#dirHandle);
 		console.info(`🧾 found ${this._books.length} books`);
-		this.requestUpdate(); // this shouldn't be necessary
 	}
 	async #scanDir(dirHandle) {
 		console.info(`📁 scanning directory for books`);
@@ -27,7 +26,7 @@ class LoadBooks extends LitElement {
 				await this.#scanDir(entry);
 			} else if (entry.name.endsWith('epub')) {
 				console.info(`📕 found a book: ${entry.name}`);
-				this._books.push(entry.name);
+				this._books = [...this._books, entry.name];
 			}
 		}
 	}
