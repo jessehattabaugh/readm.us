@@ -18,9 +18,9 @@
 		"url": "git+https://github.com/jessehattabaugh/readm.us.git"
 	},
 	"scripts": {
-		"smoke": "",
-		"start": "kill-port 5000 && serve /public",
-		"test": "start-test :5000 smoke"
+		"start": "kill-port 5000 && serve ./public",
+		"test": "WAIT_ON_TIMEOUT=3000 start-test :5000 'exit 0'"
 	},
+	"type": "module",
 	"version": "0.0.0"
 }
