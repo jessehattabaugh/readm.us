@@ -1,22 +1,44 @@
-console.log('👋🌎');
-/*
+console.info('👋🌎');
+import { html, LitElement } from 'https://cdn.skypack.dev/lit';
 
-const button = document.getElementById('openBooksDirectory');
-const books = [];
-
-async function scanDir(dirHandle) {
-	for await (const entry of dirHandle.values()) {
-		if (entry.kind == 'directory') {
-			await scanDir(entry);
-		} else if (entry.name.endsWith('epub')) {
-			books.push(entry.name);
+class LoadBooks extends LitElement {
+	#dirHandle;
+	constructor() {
+		super();
+		this._books = [];
+	}
+	static get properties() {
+		return {
+			_books: { type: Array, state: true },
+		};
+	}
+	async #loadBooks() {
+		console.info(`📚 loading books`);
+		this.#dirHandle = await window.showDirectoryPicker();
+		await this.#scanDir(this.#dirHandle);
+		console.info(`🧾 found ${this._books.length} books`);
+		this.requestUpdate(); // this shouldn't be necessary
+	}
+	async #scanDir(dirHandle) {
+		console.info(`📁 scanning directory for books`);
+		for await (const entry of dirHandle.values()) {
+			if (entry.kind == 'directory') {
+				console.info(`📂 found a directory: ${entry.name}`);
+				await this.#scanDir(entry);
+			} else if (entry.name.endsWith('epub')) {
+				console.info(`📕 found a book: ${entry.name}`);
+				this._books.push(entry.name);
+			}
 		}
+	}
+	render() {
+		return html`<button @click="${this.#loadBooks}">Load Books</button>
+			${this._books.length
+				? html`<ul>
+						${this._books.map((book) => html`<li>${book}</li>`)}
+				  </ul>`
+				: html`<p>No books loaded yet</p>`}`;
 	}
 }
 
-button.addEventListener('click', async () => {
-	const dirHandle = await window.showDirectoryPicker();
-	await scanDir(dirHandle);
-	console.dir(books.sort());
-});
-*/
+customElements.define('load-books', LoadBooks);
