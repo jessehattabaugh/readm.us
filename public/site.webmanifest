@@ -1,0 +1,14 @@
+{
+	"background_color": "#ff0000",
+	"icons": [
+		{
+			"sizes": "192x192",
+			"src": "icon.png",
+			"type": "image/png"
+		}
+	],
+	"name": "readm.us",
+	"short_name": "readm.us",
+	"start_url": "/?pwa",
+	"theme_color": "#ff0000"
+}
