@@ -1,4 +1,5 @@
-console.log('hello');
+console.log('👋🌎');
+/*
 
 const button = document.getElementById('openBooksDirectory');
 const books = [];
@@ -18,3 +19,4 @@ button.addEventListener('click', async () => {
 	await scanDir(dirHandle);
 	console.dir(books.sort());
 });
+*/
