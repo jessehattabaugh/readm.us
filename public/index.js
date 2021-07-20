@@ -1,43 +1,35 @@
 console.info('👋🌎');
-import { html, LitElement } from 'https://cdn.skypack.dev/lit';
+import { html } from 'https://cdn.skypack.dev/lit-html';
+import { component, useState } from 'https://cdn.skypack.dev/haunted';
 
-class LoadBooks extends LitElement {
-	#dirHandle;
-	constructor() {
-		super();
-		this._books = [];
-	}
-	static get properties() {
-		return {
-			_books: { type: Array, state: true },
-		};
-	}
-	async #loadBooks() {
+function LoadBooks() {
+	let dirHandle;
+	const [books, setBooks] = useState([]);
+	async function loadBooks() {
 		console.info(`📚 loading books`);
-		this.#dirHandle = await window.showDirectoryPicker();
-		await this.#scanDir(this.#dirHandle);
-		console.info(`🧾 found ${this._books.length} books`);
+		dirHandle = await window.showDirectoryPicker();
+		console.time('scanning');
+		await scanDir(dirHandle);
+		console.timeEnd('scanning');
+		console.info(`🧾 found ${books.length} books`);
 	}
-	async #scanDir(dirHandle) {
+	async function scanDir(dh) {
 		console.info(`📁 scanning directory for books`);
-		for await (const entry of dirHandle.values()) {
+		for await (const entry of dh.values()) {
 			if (entry.kind == 'directory') {
 				console.info(`📂 found a directory: ${entry.name}`);
-				await this.#scanDir(entry);
+				await scanDir(entry);
 			} else if (entry.name.endsWith('epub')) {
 				console.info(`📕 found a book: ${entry.name}`);
-				this._books = [...this._books, entry.name];
+				setBooks((books) => [...books, entry.name]);
 			}
 		}
 	}
-	render() {
-		return html`<button @click="${this.#loadBooks}">Load Books</button>
-			${this._books.length
-				? html`<ul>
-						${this._books.map((book) => html`<li>${book}</li>`)}
-				  </ul>`
-				: html`<p>No books loaded yet</p>`}`;
-	}
+	return html`<button @click="${loadBooks}">Load Books</button> ${books.length
+			? html`<ul>
+					${books.map((book) => html`<li>${book}</li>`)}
+			  </ul>`
+			: html`<p>No books loaded yet</p>`}`;
 }
 
-customElements.define('load-books', LoadBooks);
+customElements.define('load-books', component(LoadBooks));
