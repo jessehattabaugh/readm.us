@@ -3,10 +3,7 @@ import { html, LitElement } from 'https://cdn.skypack.dev/lit';
 
 class LoadBooks extends LitElement {
 	#dirHandle;
-	constructor() {
-		super();
-		this._books = [];
-	}
+	_books = [];
 	static get properties() {
 		return {
 			_books: { type: Array, state: true },
