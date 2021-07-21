@@ -20,9 +20,10 @@ function LoadBooks() {
 				entry.name.endsWith('epub') ||
 				entry.name.endsWith('pdf')
 			) {
-				const title =
+				let title =
 					entry.name.substring(0, entry.name.lastIndexOf('.')) ||
 					entry.name;
+				title = title.toLowerCase().replaceAll(/[\W|\d|_]+/g, '');
 				console.info(`📕 found a book: ${title}`);
 				try {
 					const file = await entry.getFile();
@@ -51,6 +52,8 @@ function LoadBooks() {
 				console.time('scanning');
 				await scanDir(dirHandle);
 				console.timeEnd('scanning');
+				const names = await db.files.orderBy('name').uniqueKeys();
+				setBooks(names);
 				console.info(`🧾 found ${books.length} books`);
 			}}"
 		>
