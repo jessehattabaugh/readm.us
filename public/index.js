@@ -1,6 +1,12 @@
 console.info('👋🌎');
 import { html } from 'https://cdn.skypack.dev/lit-html';
 import { component, useState } from 'https://cdn.skypack.dev/haunted';
+import Dexie from 'https://cdn.skypack.dev/dexie';
+
+const db = new Dexie('Books');
+db.version(1).stores({
+	files: '++id, name',
+});
 
 function LoadBooks() {
 	const [books, setBooks] = useState([]);
@@ -10,9 +16,31 @@ function LoadBooks() {
 			if (entry.kind == 'directory') {
 				console.info(`📂 found a directory: ${entry.name}`);
 				await scanDir(entry);
-			} else if (entry.name.endsWith('epub')) {
-				console.info(`📕 found a book: ${entry.name}`);
-				setBooks((books) => [...books, entry.name]);
+			} else if (
+				entry.name.endsWith('epub') ||
+				entry.name.endsWith('pdf')
+			) {
+				const title =
+					entry.name.substring(0, entry.name.lastIndexOf('.')) ||
+					entry.name;
+				console.info(`📕 found a book: ${title}`);
+				try {
+					const file = await entry.getFile();
+					const { name, type, lastModified, size } = file;
+					db.files.add({
+						fullName: name,
+						lastModified,
+						name: title,
+						size,
+						type,
+					});
+				} catch (Error) {
+					console.error(
+						`${Error.code} - ${Error.name} - ${Error.message}`,
+					);
+				}
+				//debugger;
+				//setBooks((books) => [...books, entry.name]);
 			}
 		}
 	}
