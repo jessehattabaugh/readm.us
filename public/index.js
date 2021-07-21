@@ -3,19 +3,10 @@ import { html } from 'https://cdn.skypack.dev/lit-html';
 import { component, useState } from 'https://cdn.skypack.dev/haunted';
 
 function LoadBooks() {
-	let dirHandle;
 	const [books, setBooks] = useState([]);
-	async function loadBooks() {
-		console.info(`📚 loading books`);
-		dirHandle = await window.showDirectoryPicker();
-		console.time('scanning');
-		await scanDir(dirHandle);
-		console.timeEnd('scanning');
-		console.info(`🧾 found ${books.length} books`);
-	}
-	async function scanDir(dh) {
+	async function scanDir(dirHandle) {
 		console.info(`📁 scanning directory for books`);
-		for await (const entry of dh.values()) {
+		for await (const entry of dirHandle.values()) {
 			if (entry.kind == 'directory') {
 				console.info(`📂 found a directory: ${entry.name}`);
 				await scanDir(entry);
@@ -25,7 +16,19 @@ function LoadBooks() {
 			}
 		}
 	}
-	return html`<button @click="${loadBooks}">Load Books</button> ${books.length
+	return html`<button
+			@click="${async () => {
+				console.info(`📚 loading books`);
+				const dirHandle = await window.showDirectoryPicker();
+				console.time('scanning');
+				await scanDir(dirHandle);
+				console.timeEnd('scanning');
+				console.info(`🧾 found ${books.length} books`);
+			}}"
+		>
+			Load Books
+		</button>
+		${books.length
 			? html`<ul>
 					${books.map((book) => html`<li>${book}</li>`)}
 			  </ul>`
