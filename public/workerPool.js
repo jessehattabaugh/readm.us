@@ -12,7 +12,7 @@ export async function scanDirectory() {
 
 	// fill the workerPool
 	for (let i = 0; i < cores; i++) {
-		const worker = new Worker('worker.js', { type: 'module' });
+		const worker = new Worker('./dirScanWorker.js', { type: 'module' });
 		worker.onmessage = (event) => {
 			const { message, dirHandle } = event.data;
 			switch (message) {
@@ -24,7 +24,7 @@ export async function scanDirectory() {
 					break;
 
 				case 'done':
-					console.info(`👩‍🏭 finished scanning`);
+					console.debug(`👩‍🏭 finished scanning`);
 					workerPool.push(event.target);
 					if (dirQueue.length) doWork();
 					else console.debug(`👩‍🏭 no directories in queue`);
@@ -36,7 +36,7 @@ export async function scanDirectory() {
 			}
 		};
 		worker.onerror = (error) => {
-			console.error(`👩‍🏭 error: ${error.message}`, error);
+			console.error(`👩‍🏭 error: ${error.message}`);
 		};
 		workerPool.push(worker);
 	}

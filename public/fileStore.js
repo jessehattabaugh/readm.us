@@ -1,18 +1,9 @@
-/*import { getDatabase } from './db.js';
-
+console.debug('🗃👋');
+import { getDatabase } from './db.js';
 const db = await getDatabase();
-
 export function addFile(entry) {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		console.debug(`🗃 storing file: ${entry.name}`);
-
-		const transaction = db.transaction(['files'], 'readwrite');
-		transaction.oncomplete = resolve;
-		transaction.onerror = (event) => {
-			reject(`error storing file ${event.target.errorCode}`);
-		};
-
-		const store = transaction.objectStore('files');
 		const extDot = entry.name.lastIndexOf('.');
 		const name = entry.name.substring(0, extDot) || entry.name;
 		const fileData = { name };
@@ -23,8 +14,18 @@ export function addFile(entry) {
 		} catch (Error) {
 			console.warn(`${entry.name} - ${Error.message}`);
 		}
-		store.add(fileData);
+		const transaction = db.transaction('files', 'readwrite');
+		const filesStore = transaction.objectStore('files');
+		let request = filesStore.add(fileData);
+		request.onsucess = () => {
+			console.debug(`🗃 success`);
+		};
+		request.onerror = () => {
+			reject(`🗃 request error ${request.error.name}`);
+		};
+		transaction.oncomplete = resolve;
+		transaction.onabort = () => {
+			reject(`🗃 transation error ${transaction.error}`);
+		};
 	});
 }
-*/
-console.log('wtf');
