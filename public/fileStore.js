@@ -1,9 +1,10 @@
-console.debug('🗃👋');
+//console.debug('🗃👋');
 import { getDatabase } from './db.js';
 const db = await getDatabase();
+
 export function addFile(entry) {
 	return new Promise(async (resolve, reject) => {
-		console.debug(`🗃 storing file: ${entry.name}`);
+		//console.debug(`🗃 storing file: ${entry.name}`);
 		const extDot = entry.name.lastIndexOf('.');
 		const name = entry.name.substring(0, extDot) || entry.name;
 		const fileData = { name };
@@ -14,18 +15,20 @@ export function addFile(entry) {
 		} catch (Error) {
 			console.warn(`${entry.name} - ${Error.message}`);
 		}
+
+		// transactions must be started after awaits
 		const transaction = db.transaction('files', 'readwrite');
 		const filesStore = transaction.objectStore('files');
 		let request = filesStore.add(fileData);
-		request.onsucess = () => {
-			console.debug(`🗃 success`);
-		};
+		/*request.onsucess = () => {
+			console.debug(`🗃 successfully added a file`);
+		};*/
 		request.onerror = () => {
 			reject(`🗃 request error ${request.error.name}`);
 		};
-		transaction.oncomplete = resolve;
 		transaction.onabort = () => {
 			reject(`🗃 transation error ${transaction.error}`);
 		};
+		transaction.oncomplete = resolve;
 	});
 }
