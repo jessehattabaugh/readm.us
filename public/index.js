@@ -1,6 +1,4 @@
-console.info('👋🌎');
-
-import { LoadFiles } from './load-files.js';
-import { FileDetails } from './file-details.js';
-customElements.define('load-files', LoadFiles);
-customElements.define('file-details', FileDetails);
+console.debug('👋🌎');
+import { scanDirectory } from './workerPool.js';
+const scanDirBtn = document.getElementsByTagName('button')[0];
+scanDirBtn.addEventListener('click', scanDirectory);
