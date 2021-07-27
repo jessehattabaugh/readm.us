@@ -1,7 +1,11 @@
 //console.debug('🗃👋');
 import { getDatabase } from './db.js';
 const db = await getDatabase();
-
+/**
+ * @param {Object} entry
+ * @param {string} entry.name
+ * @param {function} entry.getFile
+ */
 export function addFile(entry) {
 	return new Promise(async (resolve, reject) => {
 		//console.debug(`🗃 storing file: ${entry.name}`);

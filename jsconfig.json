@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"checkJs": true,
+		"module": "esnext",
+		"noImplicitAny": true,
+		"target": "esnext",
+		"moduleResolution": "node",
+		"paths": {
+			"https://cdn.skypack.dev/haunted": ["./node_modules/haunted/"]
+		}
+	},
+	"exclude": ["node_modules"]
+}

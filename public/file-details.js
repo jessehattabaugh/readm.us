@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { db } from './db.js';
 import { html } from 'https://cdn.skypack.dev/lit-html';
 import { component, useState } from 'https://cdn.skypack.dev/haunted';

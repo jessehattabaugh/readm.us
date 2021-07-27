@@ -5,12 +5,18 @@ const cores = navigator.hardwareConcurrency - 1;
 
 export async function scanDirectory() {
 	//console.debug(`👩‍🏭 starting directory scan`);
+	/** @type {Object[]} */
 	const dirQueue = [];
+	/** @type {Worker[]} */
 	const workerPool = [];
+	let finishedWorkers = 0;
 
 	function doWork() {
 		const nextWorker = workerPool.shift();
-		nextWorker.postMessage(dirQueue.shift());
+		nextWorker.postMessage({
+			message: 'do work bitch',
+			dirHandle: dirQueue.shift(),
+		});
 	}
 
 	// fill the workerPool
@@ -21,16 +27,46 @@ export async function scanDirectory() {
 			switch (message) {
 				case 'foundDir':
 					//console.debug(`👩‍🏭 found a directory`);
+					this.dispatchEvent(
+						new CustomEvent('directoryFound', {
+							detail: {
+								message: '👩‍🏭 directory found',
+								dirHandle,
+							},
+						}),
+					);
 					dirQueue.push(dirHandle);
 					if (workerPool.length) doWork();
-					//else console.debug(`👩‍🏭 no workers in pool`);
+					//else console.warn(`👩‍🏭 no workers in pool`);
 					break;
 
 				case 'done':
 					//console.debug(`👩‍🏭 finished scanning`);
-					workerPool.push(event.target);
+					this.dispatchEvent(
+						new CustomEvent('directoryScanned', {
+							detail: {
+								message: `👩‍🏭 directory scanned`,
+								dirHandle,
+							},
+						}),
+					);
+					workerPool.push(worker);
+
 					if (dirQueue.length) doWork();
-					//else console.debug(`👩‍🏭 no directories in queue`);
+					else {
+						finishedWorkers++;
+						//console.warn(`👩‍🏭☑ finishedWorkers: ${finishedWorkers}/${cores}`);
+						if (finishedWorkers >= cores) {
+							//console.log(`👩‍🏭 🏁 finished scanning`);
+							this.dispatchEvent(
+								new CustomEvent('finishedScanning', {
+									detail: {
+										message: `👩‍🏭 🏁 finished scanning`,
+									},
+								}),
+							);
+						}
+					}
 					break;
 
 				default:
@@ -45,6 +81,7 @@ export async function scanDirectory() {
 	}
 
 	// start up the first worker
+	// @ts-ignore
 	const dirHandle = await window.showDirectoryPicker();
 	dirQueue.push(dirHandle);
 	doWork();
