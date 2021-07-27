@@ -1,13 +1,14 @@
 {
 	"compilerOptions": {
 		"checkJs": true,
+		"lib": ["webworker", "dom", "esnext"],
 		"module": "esnext",
-		"noImplicitAny": true,
-		"target": "esnext",
 		"moduleResolution": "node",
+		"noImplicitAny": true,
 		"paths": {
 			"https://cdn.skypack.dev/haunted": ["./node_modules/haunted/"]
-		}
+		},
+		"target": "esnext"
 	},
 	"exclude": ["node_modules"]
 }

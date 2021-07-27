@@ -14,7 +14,6 @@ export async function scanDirectory() {
 	function doWork() {
 		const nextWorker = workerPool.shift();
 		nextWorker.postMessage({
-			message: 'do work bitch',
 			dirHandle: dirQueue.shift(),
 		});
 	}
@@ -27,14 +26,6 @@ export async function scanDirectory() {
 			switch (message) {
 				case 'foundDir':
 					//console.debug(`👩‍🏭 found a directory`);
-					this.dispatchEvent(
-						new CustomEvent('directoryFound', {
-							detail: {
-								message: '👩‍🏭 directory found',
-								dirHandle,
-							},
-						}),
-					);
 					dirQueue.push(dirHandle);
 					if (workerPool.length) doWork();
 					//else console.warn(`👩‍🏭 no workers in pool`);
@@ -45,7 +36,6 @@ export async function scanDirectory() {
 					this.dispatchEvent(
 						new CustomEvent('directoryScanned', {
 							detail: {
-								message: `👩‍🏭 directory scanned`,
 								dirHandle,
 							},
 						}),
@@ -56,14 +46,11 @@ export async function scanDirectory() {
 					else {
 						finishedWorkers++;
 						//console.warn(`👩‍🏭☑ finishedWorkers: ${finishedWorkers}/${cores}`);
+						worker.terminate();
 						if (finishedWorkers >= cores) {
 							//console.log(`👩‍🏭 🏁 finished scanning`);
 							this.dispatchEvent(
-								new CustomEvent('finishedScanning', {
-									detail: {
-										message: `👩‍🏭 🏁 finished scanning`,
-									},
-								}),
+								new CustomEvent('finishedScanning'),
 							);
 						}
 					}
@@ -81,8 +68,16 @@ export async function scanDirectory() {
 	}
 
 	// start up the first worker
-	// @ts-ignore
-	const dirHandle = await window.showDirectoryPicker();
+
+	/**
+	 * @typedef {Window & typeof globalThis & {showDirectoryPicker: function}} FileSystemAccessWindow
+	 */
+	/**
+	 * @type {FileSystemAccessWindow}
+	 */
+	/* prettier-ignore */
+	let w = (window);
+	const dirHandle = await w.showDirectoryPicker();
 	dirQueue.push(dirHandle);
 	doWork();
 }
