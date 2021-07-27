@@ -1,5 +1,8 @@
 //console.debug(`🗄👋`);
+
+/** @type {IDBDatabase}*/
 let cachedDb;
+
 export function getDatabase() {
 	return new Promise((resolve, reject) => {
 		if (cachedDb) {
@@ -30,8 +33,10 @@ export function getDatabase() {
 			};
 			resolve(cachedDb);
 		};
-		request.onerror = (event) => {
-			reject(`🗄 error opening database ${event.target.errorCode}`);
+
+		request.onerror = () => {
+			console.error(`🗄 error opening database: ${request.error}`, );
+			reject();
 		};
 		request.onblocked = () => {
 			console.error('🗄 database blocked');

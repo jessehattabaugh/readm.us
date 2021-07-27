@@ -3,6 +3,9 @@
 	"bugs": {
 		"url": "https://github.com/jessehattabaugh/readm.us/issues"
 	},
+	"dependencies": {
+		"haunted": "^4.8.2"
+	},
 	"description": "a pwa that reads books",
 	"devDependencies": {
 		"kill-port": "^1.6.1",
