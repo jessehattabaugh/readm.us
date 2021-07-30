@@ -68,15 +68,10 @@ export async function scanDirectory() {
 	}
 
 	// start up the first worker
-
 	/**
 	 * @typedef {Window & typeof globalThis & {showDirectoryPicker: function}} FileSystemAccessWindow
 	 */
-	/**
-	 * @type {FileSystemAccessWindow}
-	 */
-	/* prettier-ignore */
-	let w = (window);
+	let w = /** @type {FileSystemAccessWindow} */ (window);
 	const dirHandle = await w.showDirectoryPicker();
 	dirQueue.push(dirHandle);
 	doWork();
