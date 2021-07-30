@@ -40,13 +40,13 @@ export async function scanDirectory() {
 							},
 						}),
 					);
-					workerPool.push(worker);
-
-					if (dirQueue.length) doWork();
-					else {
+					if (dirQueue.length) {
+						workerPool.push(worker);
+						doWork();
+					} else {
+						worker.terminate();
 						finishedWorkers++;
 						//console.warn(`👩‍🏭☑ finishedWorkers: ${finishedWorkers}/${cores}`);
-						worker.terminate();
 						if (finishedWorkers >= cores) {
 							//console.log(`👩‍🏭 🏁 finished scanning`);
 							this.dispatchEvent(
