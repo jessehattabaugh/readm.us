@@ -67,12 +67,15 @@ export async function scanDirectory() {
 		workerPool.push(worker);
 	}
 
-	// start up the first worker
-	/**
-	 * @typedef {Window & typeof globalThis & {showDirectoryPicker: function}} FileSystemAccessWindow
-	 */
-	let w = /** @type {FileSystemAccessWindow} */ (window);
-	const dirHandle = await w.showDirectoryPicker();
-	dirQueue.push(dirHandle);
-	doWork();
+	try {
+		/**
+		 * @typedef {Window & typeof globalThis & {showDirectoryPicker: function}} FileSystemAccessWindow
+		 */
+		let w = /** @type {FileSystemAccessWindow} */ (window);
+		const dirHandle = await w.showDirectoryPicker();
+		dirQueue.push(dirHandle);
+		doWork();
+	} catch (Error) {
+		this.dispatchEvent(new CustomEvent('finishedScanning'));
+	}
 }
