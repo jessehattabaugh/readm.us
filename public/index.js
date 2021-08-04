@@ -1,10 +1,10 @@
 //console.debug('👋🌎');
 
-import { AppState } from './AppState.js';
+import { AppState } from './components/AppState.js';
 customElements.define('app-state', AppState);
 
-import { ScanDirectoryButton } from './ScanDirectoryButton.js';
+import { ScanDirectoryButton } from './components/ScanDirectoryButton.js';
 customElements.define('scan-directory-button', ScanDirectoryButton);
 
-import { FindDuplicatesButton } from './FindDuplicatesButton.js';
+import { FindDuplicatesButton } from './components/FindDuplicatesButton.js';
 customElements.define('find-duplicates-button', FindDuplicatesButton);

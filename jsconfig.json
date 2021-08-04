@@ -6,8 +6,7 @@
 		"moduleResolution": "node",
 		"noImplicitAny": true,
 		"paths": {
-			"https://cdn.skypack.dev/haunted": ["./node_modules/haunted/"],
-			"https://cdn.skypack.dev/lit": ["./node_modules/lit/"]
+			"https://cdn.skypack.dev/haunted": ["./node_modules/haunted/"]
 		},
 		"target": "esnext"
 	},

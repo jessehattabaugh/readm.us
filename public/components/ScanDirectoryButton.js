@@ -1,5 +1,5 @@
 import { component, html, useState } from 'https://cdn.skypack.dev/haunted';
-import { scanDirectory } from './workerPool.js';
+import { scanDirectory } from '../workerPool.js';
 /**
  * @typedef {{dirHandle: {name: string}}} dirHandle
  * */
