@@ -23,7 +23,8 @@ export function addFile(entry) {
 		// transactions must be started after awaits
 		const transaction = db.transaction('files', 'readwrite');
 		const filesStore = transaction.objectStore('files');
-		let request = filesStore.add(fileData);
+		// todo: batch file adds
+		const request = filesStore.add(fileData);
 		/*request.onsucess = () => {
 			console.debug(`🗃 successfully added a file`);
 		};*/
@@ -34,5 +35,16 @@ export function addFile(entry) {
 			reject(`🗃 transation error ${transaction.error}`);
 		};
 		transaction.oncomplete = resolve;
+	});
+}
+
+export function countFiles() {
+	return new Promise(async (resolve, reject) => {
+		const transaction = db.transaction('files', 'readwrite');
+		const filesStore = transaction.objectStore('files');
+		const request = filesStore.count();
+		request.onsuccess = () => {
+			resolve(request.result);
+		};
 	});
 }

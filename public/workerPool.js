@@ -50,7 +50,10 @@ export async function scanDirectory() {
 						if (finishedWorkers >= cores) {
 							//console.log(`👩‍🏭 🏁 finished scanning`);
 							this.dispatchEvent(
-								new CustomEvent('finishedScanning'),
+								new CustomEvent('finishedScanning', {
+									bubbles: true,
+									composed: true,
+								}),
 							);
 						}
 					}

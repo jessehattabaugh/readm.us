@@ -1,8 +1,9 @@
 import { component, html, useState } from 'https://cdn.skypack.dev/haunted';
-import { scanDirectory } from './workerPool.js';
+import { scanDirectory } from '../workerPool.js';
 /**
  * @typedef {{dirHandle: {name: string}}} dirHandle
  * */
+/** @type {CustomElementConstructor} */
 export const ScanDirectoryButton = component(() => {
 	const [status, setStatus] = useState('waiting');
 	const [scanned, setScanned] = useState(0);
